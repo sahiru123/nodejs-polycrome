@@ -3,7 +3,7 @@ const router = express.Router();
 const { authenticateToken } = require('../middleware/authenticateToken');
 const pool = require('../config/database');
 
-router.post('/process-item', async (req, res) => {
+router.post('/', async (req, res) => {
     const { serialNumber } = req.body;
   const userId = req.user.id;
 

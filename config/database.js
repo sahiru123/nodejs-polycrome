@@ -2,11 +2,11 @@ const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 
 const pool = mysql.createPool({
-  host: '127.0.0.1',
-  user: 'root',
-  port:3307 ,
-  password: '1948',
-  database: 'electricandemo',
+  host: 'localhost',
+  user: 'electricuser',
+  port: 3306,
+  password: 'JesoNpxns1iHRkeoC0uJ3xd#ad',
+  database: 'electricpoly',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
