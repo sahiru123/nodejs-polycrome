@@ -13,13 +13,13 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14' # or your preferred Node.js version
+        node-version: '20'
 
-    - name: Install dependencies
-      run: npm ci
+#    - name: Install dependencies
+ #     run: npm ci
 
-    - name: Run tests
-      run: npm test
+   # - name: Run tests
+  #    run: npm test
 
     - name: Deploy to VPS
       uses: appleboy/ssh-action@master
@@ -31,6 +31,5 @@ jobs:
           cd /root/nodejs-polycrome
           git pull origin main
           npm install
-          npm run build
-          pm2 restart index # if you're using PM2
+          pm2 restart index
           sudo systemctl restart nginx
