@@ -13,7 +13,7 @@ const app = express();
 
 // Enhanced CORS configuration
 const corsOptions = {
-  origin: 'https://loyalty.polycrome.com', // Allow only your frontend domain
+  origin: ['https://loyalty.polycrome.com', 'http://localhost:3000'],
   credentials: true, // Allow cookies if you're using them for authentication
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
