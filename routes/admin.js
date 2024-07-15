@@ -47,7 +47,7 @@ router.delete('/products/:id', authenticateToken, isAdmin, async (req, res) => {
 
 router.get('/users', authenticateToken, isAdmin, async (req, res) => {
   try {
-    const [rows] = await pool.execute('SELECT id, first_name, last_name, nic_number, total_points, is_admin FROM users');
+    const [rows] = await pool.execute('SELECT id, first_name, last_name, nic_number, city, total_points, is_admin, contact_no FROM users');
     res.json(rows);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching users' });

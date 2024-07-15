@@ -7,9 +7,9 @@ const { authenticateToken } = require('../middleware/authenticateToken');
 
 router.post('/register', async (req, res) => {
   try {
-    const { firstName, lastName, nicNumber, contactNo, password } = req.body;
+    const { firstName, lastName, city, nicNumber, contactNo, password } = req.body;
 
-    if (!firstName || !lastName || !nicNumber || !contactNo || !password) {
+    if (!firstName || !lastName || !city || !nicNumber || !contactNo || !password) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
@@ -28,15 +28,14 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const [result] = await pool.execute(
-      `INSERT INTO users (first_name, last_name, nic_number, contact_no, password)
-       VALUES (?, ?, ?, ?, ?)`,
-      [firstName, lastName, nicNumber, contactNo, hashedPassword]
+      `INSERT INTO users (first_name, last_name, city, nic_number, contact_no, password, total_points)
+       VALUES (?, ?, ?, ?, ?, ?, 500)`,
+      [firstName, lastName, city, nicNumber, contactNo, hashedPassword]
     );
 
     // Generate token for the newly registered user
     const token = jwt.sign({ id: result.insertId, nicNumber }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    // In your register route
     res.status(201).json({ message: 'User registered successfully', token, userId: result.insertId });
   } catch (error) {
     console.error('Registration error:', error);

@@ -1,7 +1,6 @@
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 
-
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -21,10 +20,11 @@ async function initDatabase() {
         id INT AUTO_INCREMENT PRIMARY KEY,
         first_name VARCHAR(255) NOT NULL,
         last_name VARCHAR(255) NOT NULL,
+        city VARCHAR(255) NOT NULL,
         nic_number VARCHAR(20) UNIQUE NOT NULL,
         contact_no VARCHAR(20) NOT NULL,
         password VARCHAR(255) NOT NULL,
-        total_points INT DEFAULT 0,
+        total_points INT DEFAULT 500,
         is_admin BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
@@ -34,8 +34,8 @@ async function initDatabase() {
     const adminPassword = 'admin123'; // Change this to a secure password
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
     await pool.execute(`
-      INSERT IGNORE INTO users (first_name, last_name, nic_number, contact_no, password, is_admin)
-      VALUES ('Admin', 'User', 'ADMIN001', 'N/A', ?, TRUE)
+      INSERT IGNORE INTO users (first_name, last_name, city, nic_number, contact_no, password, is_admin)
+      VALUES ('Admin', 'User', 'Admin City', 'ADMIN001', 'N/A', ?, TRUE)
     `, [hashedPassword]);
     console.log('Default admin user created or already exists');
 
@@ -72,7 +72,7 @@ async function initDatabase() {
       const products = [
         { itemCode: 'ITEMC01', name: 'Pendent Holder(Pin Type)', points: 5 },
         { itemCode: 'ITEMC02', name: 'Angle Batten Holder(Pin Type)', points: 5 },
-        { itemCode: 'ITEMC03', name: 'Panel Light Slim Round Recessed 18W DL', points: 50 },
+        { itemCode: 'ITEMC03', name: 'Square Surface 12W Daylight Plastic Panel Light', points: 50 },
         { itemCode: 'ITEMC04', name: 'Flood Light LED 10W D/L-Pad', points: 50 },
         { itemCode: 'ITEMC05', name: 'Viera DC Fan', points: 100 }
       ];
@@ -91,6 +91,14 @@ async function initDatabase() {
     } else {
       console.log('Products table already contains data, skipping mock data insertion');
     }
+
+    // Update the product name
+    await pool.execute(`
+      UPDATE products 
+      SET product_name = 'Square Surface 12W Daylight Plastic Panel Light'
+      WHERE product_name = 'Panel Light Slim Round Recessed 18W DL'
+    `);
+    console.log('Product name updated successfully');
 
   } catch (error) {
     console.error('Error initializing database:', error);
